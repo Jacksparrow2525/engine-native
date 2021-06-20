@@ -107,6 +107,14 @@ public:
     Format getColorFormat() const;
     Format getDepthStencilFormat() const;
 
+#if 1 // JAMIE: Temporary hack to get GFX context for OpenXR
+public:
+   inline Context *getContext() const { return _context; }
+#else
+protected:
+   inline Context *getContext() const { return _context; }
+#endif
+
 protected:
     static Device *instance;
 
@@ -144,8 +152,7 @@ protected:
     virtual void bindRenderContext(bool bound) {}
     virtual void bindDeviceContext(bool bound) {}
 
-    inline Context *getContext() const { return _context; }
-
+ 
     API                _api       = API::UNKNOWN;
     SurfaceTransform   _transform = SurfaceTransform::IDENTITY;
     String             _deviceName;

@@ -74,6 +74,7 @@ jobject JniHelper::classloader = nullptr;
 std::function<void()> JniHelper::classloaderCallback = nullptr;
 jobject JniHelper::_activity = nullptr;
 JavaVM *JniHelper::_javaVM = nullptr;
+struct android_app *JniHelper::_app = nullptr;
 
 JavaVM *JniHelper::getJavaVM() {
     pthread_t thisthread = pthread_self();
@@ -81,6 +82,19 @@ JavaVM *JniHelper::getJavaVM() {
     return JniHelper::_javaVM;
 }
 
+    struct android_app *JniHelper::getAPP() {
+        pthread_t thisthread = pthread_self();
+        LOGD("JniHelper::getAPP), pthread_self() = %ld", thisthread);
+        return JniHelper::_app;
+    }
+
+// Jamie
+void JniHelper::SetJVMandActivity(void *JavaVM, jobject Activity, struct android_app *app)
+{
+    JniHelper::_activity = Activity;
+    JniHelper::_javaVM = (_JavaVM*)JavaVM;
+    JniHelper::_app = app;
+}
 void JniHelper::init(JNIEnv *env, jobject activity) {
     env->GetJavaVM(&JniHelper::_javaVM);
     JniHelper::_activity = activity;

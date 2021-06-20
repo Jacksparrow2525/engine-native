@@ -59,6 +59,11 @@ public:
     static jobject getActivity();
     static void init(JNIEnv *env, jobject activity);
 
+    // Jamie - For OpenXR (2021.07.06)
+    static void SetJVMandActivity(void *JavaVM, jobject Activity, struct android_app *app);
+
+    static struct android_app *getAPP();
+
     static bool getStaticMethodInfo(JniMethodInfo &methodinfo,
                                     const char *className,
                                     const char *methodName,
@@ -312,6 +317,7 @@ public:
 private:
     static jobject _activity;
     static JavaVM *_javaVM;
+    static struct android_app *_app;
 
     static JNIEnv *cacheEnv();
     static bool getMethodInfo_DefaultClassLoader(JniMethodInfo &methodinfo,
